@@ -97,6 +97,15 @@ function xmldb_ipal_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2012072300) {
+        $table = new xmldb_table('ipal');
+		$field = new xmldb_field('anonymous', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'name');        
+        // Conditionally launch add field anonymous
+        if (!$dbman->field_exists($table, $field)) {
+        	$dbman->add_field($table, $field);
+        }
+    }
+
 
 /// Final return of upgrade result (true, all went good) to Moodle.
     return true;

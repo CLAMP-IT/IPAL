@@ -30,48 +30,63 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot.'/mod/ipal/locallib.php');
 
 class mod_ipal_mod_form extends moodleform_mod {
 
-    function definition() {
+	function definition() {
+ 
+		global $COURSE;
+		global $DB;
+		$mform =& $this->_form;
 
-        global $COURSE;
-        $mform =& $this->_form;
+		//-------------------------------------------------------------------------------
+		// Adding the "general" fieldset, where all the common settings are showed
+		$mform->addElement('header', 'general', get_string('general', 'form'));
 
-//-------------------------------------------------------------------------------
-    /// Adding the "general" fieldset, where all the common settings are showed
-        $mform->addElement('header', 'general', get_string('general', 'form'));
+		/// Adding the standard "name" field
+		$mform->addElement('text', 'name', get_string('ipalname', 'ipal'), array('size'=>'64'));
+		if (!empty($CFG->formatstringstriptags)) {
+			$mform->setType('name', PARAM_TEXT);
+		} else {
+			$mform->setType('name', PARAM_CLEAN);
+		}
+		$mform->addRule('name', null, 'required', null, 'client');
+		$mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+		$mform->addHelpButton('name', 'ipalname', 'ipal');
 
-    /// Adding the standard "name" field
-        $mform->addElement('text', 'name', get_string('ipalname', 'ipal'), array('size'=>'64'));
-        if (!empty($CFG->formatstringstriptags)) {
-            $mform->setType('name', PARAM_TEXT);
-        } else {
-            $mform->setType('name', PARAM_CLEAN);
-        }
-        $mform->addRule('name', null, 'required', null, 'client');
-        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'ipalname', 'ipal');
+		//Add options to choose "anonymous" and "non-anonymous"
+		$mform->addElement('select', 'anonymous', get_string('ipaltype','ipal'), array(0=> 'non-Anonymous',1=>'Anonymous'));
+		$mform->addHelpButton('anonymous', 'ipaltype', 'ipal');
+		//Disable the IPAL Type Select as long as there is an answer in the IPAL instance
+		$cm_id = optional_param('update', 0, PARAM_INT);
+		if ($cm_id) {
+			$cm = $DB->get_record('course_modules', array('id' => $cm_id), '*', MUST_EXIST);
+			if (ipal_check_answered($cm->instance)) {
+				$mform->disabledIf('anonymous', 'name');
+			}
+		}
+		
+		/// Adding the standard "intro" and "introformat" fields
+		$this->add_intro_editor();
+		/// This is to fix a few weird insert issuess
+		$mform->addElement('hidden', 'questions', 'required', null, 'client');
+		$mform->addElement('hidden','preferredbehaviour','Graph');
 
-    /// Adding the standard "intro" and "introformat" fields
-        $this->add_intro_editor();
-   /// This is to fix a few weird insert issues
-	$mform->addElement('hidden', 'questions', '');
-	$mform->addElement('hidden','preferredbehaviour','Graph');
-//-------------------------------------------------------------------------------
-    /// Adding the rest of ipal settings, spreeading all them into this fieldset
-    /// or adding more fieldsets ('header' elements) if needed for better logic
-  //      $mform->addElement('static', 'label1', 'ipalsetting1', 'Your ipal fields go here. Replace me!');
+		//-------------------------------------------------------------------------------
+		/// Adding the rest of ipal settings, spreeading all them into this fieldset
+		/// or adding more fieldsets ('header' elements) if needed for better logic
+		//      $mform->addElement('static', 'label1', 'ipalsetting1', 'Your ipal fields go here. Replace me!');
 
-    //    $mform->addElement('header', 'ipalfieldset', get_string('ipalfieldset', 'ipal'));
-//        $mform->addElement('static', 'label2', 'ipalsetting2', 'Your ipal fields go here. Replace me!');
+		//    $mform->addElement('header', 'ipalfieldset', get_string('ipalfieldset', 'ipal'));
+		//        $mform->addElement('static', 'label2', 'ipalsetting2', 'Your ipal fields go here. Replace me!');
 
-//-------------------------------------------------------------------------------
-        // add standard elements, common to all modules
-        $this->standard_coursemodule_elements();
-//-------------------------------------------------------------------------------
-        // add standard buttons, common to all modules
-        $this->add_action_buttons();
-
-    }
+		//-------------------------------------------------------------------------------
+		// add standard elements, common to all modules
+		$this->standard_coursemodule_elements();
+		//-------------------------------------------------------------------------------
+		// add standard buttons, common to all modules
+		$this->add_action_buttons();
+ 
+	}
 }

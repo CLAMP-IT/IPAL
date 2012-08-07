@@ -319,6 +319,49 @@ function ipal_scale_used_anywhere($scaleid) {
 }
 
 /**
+*Since the /lib/questionlib.php script doesn't get the file name correct for the function 
+* (line about 1829) for Moodle 2.2 (and possibly other versions) this function corrects 
+* for having mod_ in front of the function name 
+*/
+function mod_ipal_question_pluginfile($course, $context, $component, $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) {
+     ipal_question_pluginfile($course, $context, $component, $filearea, $qubaid, $slot, $args, $forcedownload);
+}
+
+
+/**
+ * Called via pluginfile.php -> question_pluginfile to serve files belonging to
+ * a question in a question_attempt when that attempt is a quiz attempt.
+ *
+ * @package  mod_ipal
+ * This function was taken straight from mod_quiz, Moodle verson 2.3 
+ * It ws added to /ipal/lib.php to enable images to be used in question text 
+ * @category files
+ * @param stdClass $course course settings object
+ * @param stdClass $context context object
+ * @param string $component the name of the component we are serving files for.
+ * @param string $filearea the name of the file area.
+ * @param int $qubaid the attempt usage id.
+ * @param int $slot the id of a question in this quiz attempt.
+ * @param array $args the remaining bits of the file path.
+ * @param bool $forcedownload whether the user must be forced to download the file.
+ * @param array $options additional options affecting the file serving
+ * @return bool false if file not found, does not return if found - justsend the file
+ */
+function ipal_question_pluginfile($course, $context, $component,
+        $filearea, $qubaid, $slot, $args, $forcedownload, array $options=array()) {
+    global $CFG;
+
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = "/$context->id/$component/$filearea/$relativepath";
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+        send_file_not_found();
+    }
+
+    send_stored_file($file, 0, 0, $forcedownload, $options);
+}
+
+/**
  * Execute post-uninstall custom actions for the module
  * This function was added in 1.9
  *
