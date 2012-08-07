@@ -127,7 +127,7 @@ function ipal_create_genericq($courseid){
 	}
 	if ($qessaycheckid == 0){
     	$questioninsert ->name = 'Generic essay question';//$title;
-    	$questioninsert ->questiontext = 'Please answer the question in the sapce provided.';//.$text;
+    	$questioninsert ->questiontext = 'Please answer the question in the space provided.';//.$text;
     	$questioninsert ->qtype = 'essay';
     	$lastinsertid = $DB->insert_record('question', $questioninsert);
 		$essayoptions = new stdClass;

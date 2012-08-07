@@ -31,7 +31,7 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
-    require_once("locallib.php");
+require_once("locallib.php");
 
 $a  = optional_param('a', 0, PARAM_INT);  // ipal instance ID
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
@@ -70,6 +70,7 @@ echo $OUTPUT->header();
 // Replace the following lines with you own code
 //echo $OUTPUT->heading('Yay! It works!');
 $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+ipal_print_anonymous_message();
 if (has_capability('mod/ipal:InstructorInterface', $context)){
 	ipal_display_instructor_interface($cm->id);
 	//ipal_printarray($_POST);
