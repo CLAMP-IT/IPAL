@@ -25,17 +25,30 @@
 
 
 require_once('../../config.php');
-require_once($CFG->dirroot . '/question/engine/lib.php');//needed for Class 'question_display_options' 
-require_once($CFG->dirroot . '/question/editlib.php');//needed for Class 'question_bank_view'
-require_once($CFG->dirroot . '/mod/ipal/quiz/ipal_editlib_new.php');
+//require_once($CFG->dirroot . '/question/engine/lib.php');//needed for Class 'question_display_options' 
+//require_once($CFG->dirroot . '/question/editlib.php');//needed for Class 'question_bank_view'
+require_once("locallib.php");
+require_once($CFG->dirroot . '/mod/ipal/question/engine/lib.php');//needed for Class 'question_display_options' 
+require_once($CFG->dirroot . '/mod/ipal/question/engine/bank.php');
+require_once("ipal_edit_quizlocallib.php");
+//require_once($CFG->dirroot . '/mod/ipal/quiz/ipal_editlib_new.php');
 require_once($CFG->dirroot . '/mod/ipal/quiz/ipal_xmlparser.php');
+$cmid = required_param('cmid', PARAM_INT);
+$cm = $DB->get_record('course_modules',array('id'=>$cmid));
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$context = $DB->get_record('context',array('contextlevel'=>'50','instanceid'=>$course->id));
+$PAGE->set_context(get_context_instance(CONTEXT_COURSE, $course->id));
+$PAGE->set_url('/mod/ipal/view.php', array('id' => $cm->id));
+$PAGE->set_title('Edit or add questions for IPAL');
+$PAGE->set_heading('My modules page heading');
+require_login($course, true, $cm);
 
 list($thispageurl, $contexts, $cmid, $cm, $ipal, $pagevars) =
-        question_edit_setup('editq', '/mod/ipal/compadre_questions.php', true);//Modified for ipal
+        ipal_question_edit_setup('editq', '/mod/ipal/compadre_questions.php', true);//Modified for ipal
 
 $scrollpos = optional_param('scrollpos', '', PARAM_INT);
 
-$defaultcategoryobj = question_make_default_categories($contexts->all());
+$defaultcategoryobj = ipal_question_make_default_categories($contexts->all());
 $defaultcategory = $defaultcategoryobj->id . ',' . $defaultcategoryobj->contextid;
 
 $PAGE->set_url($thispageurl);
@@ -84,6 +97,7 @@ if (($addquestion = optional_param('addquestion', 0, PARAM_INT)) && confirm_sess
  *      add at the end
  * @return bool false if the question was already in the quiz
  */
+/*
 function ipal_add_quiz_question($id, $quiz, $page = 0) {
     global $DB;
     $questions = explode(',', quiz_clean_layout($quiz->questions));
@@ -150,7 +164,7 @@ if (optional_param('add', false, PARAM_BOOL) && confirm_sesskey()) {
     }
     redirect($afteractionurl);
 }
-
+*/
 // End of process commands =====================================================
 
 $PAGE->requires->yui2_lib('container');
