@@ -13,7 +13,7 @@ foreach($_GET as $key=>$value){
         }
     }
 }
-echo "Click <a href='".$CFG->wwwroot."/mod/ipal/view.php?id=$cmid'>here</a> to return to IPAL activity.";
+echo "Click <a href='".$CFG->wwwroot."/mod/ipal/ipal_quiz_edit.php?cmid=$cmid'>here</a> to return to IPAL activity.";
 if($ejsappid > 0){
     echo "\n<br />An EJS App activity is being added to the selected questions.";
 }

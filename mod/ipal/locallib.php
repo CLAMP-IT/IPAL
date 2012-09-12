@@ -579,7 +579,7 @@ function ipal_make_student_form(){
     echo  $text;
 		echo "<br>";
 		if(ipal_get_qtype($qid) == 'essay'){
-			echo  "<INPUT TYPE=\"text\" NAME=\"a_text\" >\n<br />";
+			echo  "<INPUT TYPE=\"text\" NAME=\"a_text\" size=80>\n<br />";
 			echo  "<INPUT TYPE=hidden NAME=\"answer_id\" value=\"-1\">";
 		}
 		else

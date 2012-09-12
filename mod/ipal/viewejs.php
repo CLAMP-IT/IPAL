@@ -30,7 +30,10 @@ $PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulen
 echo "<html><head></head><body>";
 echo "<div align='center'>\n";
 $COLUMNS_WIDTH = 50;
+$original_columns_width = $CFG->columns_width;
+$CFG->columns_width = 50;
 echo $OUTPUT->heading(generate_applet_embedding_code($ejsapp, null, null, null));
+$CFG->columns_width = $original_columns_width;
 //$ejstext = preg_replace("/w\ \-\ 480/",'w - 50',$ejstext);
 //echo $ejstext;
 echo "\n</div></body></html>";
