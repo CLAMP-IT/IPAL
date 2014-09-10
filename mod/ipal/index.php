@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,12 +26,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/// Replace ipal with the name of your module and remove this line
-
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
-$id = required_param('id', PARAM_INT);   // course
+$id = required_param('id', PARAM_INT);   // Course id.
 
 if (! $course = $DB->get_record('course', array('id' => $id))) {
     error('Course ID is incorrect');
@@ -40,9 +37,9 @@ if (! $course = $DB->get_record('course', array('id' => $id))) {
 
 require_course_login($course);
 
-add_to_log($course->id, 'ipal', 'view all', "index.php?id=$course->id", '');
+add_to_log($course->id, 'ipal', 'view all', "index.php?id = $course->id", '');
 
-/// Print the header
+// Print the header.
 
 $PAGE->set_url('/mod/ipal/view.php', array('id' => $id));
 $PAGE->set_title($course->fullname);
@@ -50,16 +47,14 @@ $PAGE->set_heading($course->shortname);
 
 echo $OUTPUT->header();
 
-/// Get all the appropriate data
+// Get all the appropriate data.
 
 if (! $ipals = get_all_instances_in_course('ipal', $course)) {
     echo $OUTPUT->heading(get_string('noipals', 'ipal'), 2);
-    echo $OUTPUT->continue_button("view.php?id=$course->id");
+    echo $OUTPUT->continue_button("view.php?id = $course->id");
     echo $OUTPUT->footer();
     die();
 }
-
-/// Print the list of instances (your module will probably extend this)
 
 $timenow  = time();
 $strname  = get_string('name');
@@ -79,10 +74,10 @@ if ($course->format == 'weeks') {
 
 foreach ($ipals as $ipal) {
     if (!$ipal->visible) {
-        //Show dimmed if the mod is hidden
+        // Show dimmed if the mod is hidden.
         $link = '<a class="dimmed" href="view.php?id='.$ipal->coursemodule.'">'.format_string($ipal->name).'</a>';
     } else {
-        //Show normal if the mod is visible
+        // Show normal if the mod is visible.
         $link = '<a href="view.php?id='.$ipal->coursemodule.'">'.format_string($ipal->name).'</a>';
     }
 
@@ -96,6 +91,6 @@ foreach ($ipals as $ipal) {
 echo $OUTPUT->heading(get_string('modulenameplural', 'ipal'), 2);
 print_table($table);
 
-/// Finish the page
+// Finish the page.
 
 echo $OUTPUT->footer();

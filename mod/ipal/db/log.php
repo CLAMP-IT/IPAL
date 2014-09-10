@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -17,12 +16,9 @@
 
 /**
  * Definition of log events
- * NOTE: this is an example how to insert log event during installation/update.
- * It is not really essential to know about it, but these logs were created as example
- * in the previous 1.9 NEWMODULE.
  *
  * @package   mod_ipal
- * @copyright 2010 Your Name <your@email.adress>
+ * @copyright 2012 W. F. Junkin Eckerd College (http://www.eckerd.edu)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,8 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 global $DB;
 
 $logs = array(
-    array('module'=>'ipal', 'action'=>'add', 'mtable'=>'ipal', 'field'=>'name'),
-    array('module'=>'ipal', 'action'=>'update', 'mtable'=>'ipal', 'field'=>'name'),
-    array('module'=>'ipal', 'action'=>'view', 'mtable'=>'ipal', 'field'=>'name'),
-    array('module'=>'ipal', 'action'=>'view all', 'mtable'=>'ipal', 'field'=>'name')
+    array('module' => 'ipal', 'action' => 'add', 'mtable' => 'ipal', 'field' => 'name'),
+    array('module' => 'ipal', 'action' => 'update', 'mtable' => 'ipal', 'field' => 'name'),
+    array('module' => 'ipal', 'action' => 'view', 'mtable' => 'ipal', 'field' => 'name'),
+    array('module' => 'ipal', 'action' => 'view all', 'mtable' => 'ipal', 'field' => 'name')
 );

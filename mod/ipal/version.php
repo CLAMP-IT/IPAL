@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,14 +22,13 @@
  * /admin/index.php
  *
  * @package   mod_ipal
- * @copyright 2011 ipal development team @ eckerd college
+ * @copyright 2011 W, F, Junkin, Eckerd College (http://www.eckerd.edu)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-//$module->version  = 1.11;           // If version == 0 then module will not be installed
-$module->version  = 2012081602;  // The current module version (Date: YYYYMMDDXX)
-//$module->requires = 2010031900;  // Requires this Moodle version
-$module->requires = 2011033003;
-$module->cron     = 60;           // Period for cron to check this module (secs)
+$module->version  = 2014081600;  // The current module version (Date: YYYYMMDDXX).
+$module->requires = 2011033003;  // Requires this Moodle version.
+$module->cron     = 60;           // Period for cron to check this module (secs).
+$module->release = '1.7.1 (Build: 2014081600';

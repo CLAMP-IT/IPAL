@@ -1,5 +1,26 @@
 <?php
-//For iapl from /question/engine/lib.php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * The class to provide the features to display questions
+ *
+ * @package   mod_ipal
+ * @copyright 2011 Eckerd College
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 /**
  * This class contains all the options that controls how a question is displayed.
@@ -16,16 +37,17 @@
  * Modified by W. F. Junkin 2012.02.14 for IPAL so that changing versons would not impact IPAL
  */
 class ipal_question_display_options {
-    /**#@+ @var integer named constants for the values that most of the options take. */
+    /** @var integer named constants for the values that most of the options take. */
     const HIDDEN = 0;
+    /** @var integer named constants for the values that most of the options take. */
     const VISIBLE = 1;
+    /** @var integer named constants for the values that most of the options take. */
     const EDITABLE = 2;
-    /**#@-*/
 
-    /**#@+ @var integer named constants for the {@link $marks} option. */
+    /** @var integer named constants for the {@link $marks} option. */
     const MAX_ONLY = 1;
+    /** @var integer named constants for the {@link $marks} option. */
     const MARK_AND_MAX = 2;
-    /**#@-*/
 
     /**
      * @var integer maximum value for the {@link $markpd} option. This is
@@ -185,6 +207,3 @@ class ipal_question_display_options {
         return $options;
     }
 }
-
-
-?>

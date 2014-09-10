@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -42,14 +41,14 @@
  * The variable name for the capability definitions array is $capabilities
  *
  * @package   mod_ipal
- * @copyright 2010 Your Name
+ * @copyright 2012 W. F. Junkin, Eckerd College (http://www.eckerd.edu)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'mod/ipal:InstructorInterface' => array(
+    'mod/ipal:instructoraccess' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
@@ -57,7 +56,18 @@ $capabilities = array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        )
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+    ),
+    'mod/ipal:addinstance' => array(
+        'riskbitmask' => RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
     ),
 
 
@@ -84,4 +94,3 @@ $capabilities = array(
     ),
 ******************************/
 );
-

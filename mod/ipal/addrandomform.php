@@ -17,9 +17,8 @@
 /**
  * Defines the Moodle forum used to add random questions to the quiz.
  *
- * @package    mod
- * @subpackage quiz
- * @copyright  2008 Olli Savolainen
+ * @package    mod_ipal
+ * @copyright  2012 W. F. Junkin, Eckerd College, http://www.eckerd.edu
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,13 +36,16 @@ require_once($CFG->libdir.'/formslib.php');
  */
 class quiz_add_random_form extends moodleform {
 
+    /**
+     * Function to help define a form for adding random questions.
+     */
     protected function definition() {
         global $CFG, $DB;
         $mform =& $this->_form;
 
         $contexts = $this->_customdata;
 
-        //--------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------
         $mform->addElement('header', 'categoryheader',
                 get_string('randomfromexistingcategory', 'quiz'));
 
@@ -54,7 +56,7 @@ class quiz_add_random_form extends moodleform {
 
         $mform->addElement('submit', 'existingcategory', get_string('addrandomquestion', 'quiz'));
 
-        //--------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------
         $mform->addElement('header', 'categoryheader',
                 get_string('randomquestionusinganewcategory', 'quiz'));
 
@@ -68,7 +70,7 @@ class quiz_add_random_form extends moodleform {
         $mform->addElement('submit', 'newcategory',
                 get_string('createcategoryandaddrandomquestion', 'quiz'));
 
-        //--------------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------
         $mform->addElement('cancel');
         $mform->closeHeaderBefore('cancel');
 
@@ -80,6 +82,11 @@ class quiz_add_random_form extends moodleform {
         $mform->setType('returnurl', PARAM_LOCALURL);
     }
 
+    /**
+     * Function to check that the form is in a category and has a name.
+     * @param array $fromform Information about the form
+     * @param array $files
+     */
     public function validation($fromform, $files) {
         $errors = parent::validation($fromform, $files);
 

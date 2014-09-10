@@ -1,5 +1,26 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * The class to provide access to the question bank
+ *
+ * @package   mod_ipal
+ * @copyright 2011 Eckerd College
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 /**
  * This static class provides access to the other question bank.
@@ -16,12 +37,15 @@ abstract class ipal_question_bank {
     /** @var array question type name => 1. Records which question definitions have been loaded. */
     private static $loadedqdefs = array();
 
+    /** @var boolean */
     protected static $questionfinder = null;
 
     /** @var boolean nasty hack to allow unit tests to call {@link load_question()}. */
     private static $testmode = false;
+    /** @var array */
     private static $testdata = array();
 
+    /** @var boolean */
     private static $questionconfig = null;
 
     /**
@@ -36,6 +60,7 @@ abstract class ipal_question_bank {
     private static $fractionoptionsfull = null;
 
     /**
+     * Function used to determine if a certain question type is installed in this Moodle.
      * @param string $qtypename a question type name, e.g. 'multichoice'.
      * @return bool whether that question type is installed in this Moodle.
      */
@@ -85,6 +110,7 @@ abstract class ipal_question_bank {
     }
 
     /**
+     * Function used to determine if a user can create a question of this type.
      * @param string $qtypename the internal name of a question type. For example multichoice.
      * @return bool whether users are allowed to create questions of this type.
      */
@@ -96,6 +122,7 @@ abstract class ipal_question_bank {
     }
 
     /**
+     * Function that detects if a type of question exists.
      * @param string $qtypename the internal name of a question type. For example multichoice.
      * @return bool whether this question type exists.
      */
@@ -104,7 +131,8 @@ abstract class ipal_question_bank {
     }
 
     /**
-     * @param $qtypename the internal name of a question type, for example multichoice.
+     * Function to return the human readable name of a question type.
+     * @param string $qtypename the internal name of a question type, for example multichoice.
      * @return string the human_readable name of this question type, from the language pack.
      */
     public static function get_qtype_name($qtypename) {
@@ -112,6 +140,7 @@ abstract class ipal_question_bank {
     }
 
     /**
+     * Function to return all installed question types.
      * @return array all the installed question types.
      */
     public static function get_all_qtypes() {
@@ -130,7 +159,8 @@ abstract class ipal_question_bank {
     /**
      * Sort an array of question types according to the order the admin set up,
      * and then alphabetically for the rest.
-     * @param array qtype->name() => qtype->local_name().
+     * @param array $qtypes qtype->name() => qtype->local_name().
+     * @param bool $config
      * @return array sorted array.
      */
     public static function sort_qtype_array($qtypes, $config = null) {
@@ -150,8 +180,7 @@ abstract class ipal_question_bank {
         }
 
         ksort($sortorder);
-//        collatorlib::asort($otherqtypes);
-        textlib_get_instance()->asort($otherqtypes);//R02.15 to remove bug reportsEmoved by W. F. Junkin 2012.
+        textlib_get_instance()->asort($otherqtypes);
 
         $sortedqtypes = array();
         foreach ($sortorder as $name) {
@@ -164,6 +193,8 @@ abstract class ipal_question_bank {
     }
 
     /**
+     * Function to return all the question types that users are allowed to create,
+     *      sorted into the preferred order set on the admin screen.
      * @return array all the question types that users are allowed to create,
      *      sorted into the preferred order set on the admin screen.
      */
@@ -245,6 +276,7 @@ abstract class ipal_question_bank {
     }
 
     /**
+     * Function to create a question finder.
      * @return question_finder a question finder.
      */
     public static function get_finder() {
@@ -268,7 +300,10 @@ abstract class ipal_question_bank {
         self::$testmode = false;
         self::$testdata = array();
     }
-
+    /**
+     * Return data on test question.
+     * @param int $questionid
+     */
     private static function return_test_question_data($questionid) {
         if (!isset(self::$testdata[$questionid])) {
             throw new coding_exception('question_bank::return_test_data(' . $questionid .
@@ -280,7 +315,7 @@ abstract class ipal_question_bank {
     /**
      * To be used for unit testing only. Will throw an exception if
      * {@link start_unit_test()} has not been called first.
-     * @param object $questiondata a question data object to put in the test data store.
+     * @param question_definition $question a question data object to put in the test data store.
      */
     public static function load_test_question_data(question_definition $question) {
         if (!self::$testmode) {
@@ -290,16 +325,19 @@ abstract class ipal_question_bank {
         self::$testdata[$question->id] = $question;
     }
 
+    /**
+     * Function that can be used with fraction options.
+     */
     protected function ensure_fraction_options_initialised() {
         if (!is_null(self::$fractionoptions)) {
             return;
         }
 
-        // define basic array of grades. This list comprises all fractions of the form:
-        // a. p/q for q <= 6, 0 <= p <= q
-        // b. p/10 for 0 <= p <= 10
-        // c. 1/q for 1 <= q <= 10
-        // d. 1/20
+        // Define basic array of grades. This list comprises all fractions of the form.
+        // A. p/q for q <= 6, 0 <= p <= q.
+        // B. p/10 for 0 <= p <= 10.
+        // C. 1/q for 1 <= q <= 10.
+        // D. 1/20.
         $rawfractions = array(
             0.9000000,
             0.8333333,
@@ -348,18 +386,22 @@ abstract class ipal_question_bank {
     }
 
     /**
-     * @return array string => string The standard set of grade options (fractions)
+     * Function to return the standard set of grade options (fractions)
      * to use when editing questions, in the range 0 to 1 inclusive. Array keys
      * are string becuase: a) we want grades to exactly 7 d.p., and b. you can't
      * have float array keys in PHP.
      * Initialised by {@link ensure_grade_options_initialised()}.
+     * @return array string => string
      */
     public static function fraction_options() {
         self::ensure_fraction_options_initialised();
         return self::$fractionoptions;
     }
 
-    /** @return array string => string The full standard set of (fractions) -1 to 1 inclusive. */
+    /**
+     * Function to return the full standard set of fractions.
+     * @return array string => string The full standard set of (fractions) -1 to 1 inclusive.
+     */
     public static function fraction_options_full() {
         self::ensure_fraction_options_initialised();
         return self::$fractionoptionsfull;
