@@ -1,7 +1,5 @@
 IPAL
 ====
-This version of IPAL (2012073100) 
-supports all images in question text, 
-allows compleely anonymous polling with IPAL, 
-fixes a bug in the display of questions to students, and 
-provides an integration between the EJS App Moodle module and questions set through IPAL. 
+This version of IPAL (2014081600) is compatible with Moodle 2.7.1.
+It supports in-class polling when students use web-enabled devices and/or smart phones with free Apps.
+There is an polling App for the iPhone and iPad (the IOS version) and an App for Android devices.
